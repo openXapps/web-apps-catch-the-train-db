@@ -1,0 +1,39 @@
+// Custom BS4 variables
+
+$_primary:     #6699cc;
+$_secondary:   #3973ac;
+$_success:     #2eb82e;
+$_info:        #e6e600;
+$_warning:     #e66800;
+$_danger:      #e60000;
+$_light:       #ecf2f9;
+$_dark:        #204060;
+$_white:       #ffffff;
+$_black:       #000000;
+
+$primary:       $_primary;
+$secondary:     $_secondary;
+$success:       $_success;
+$info:          $_info;
+$warning:       $_warning;
+$danger:        $_danger;
+$light:         $_light;
+$dark:          $_dark;
+$white:         $_white;
+$black:         $_black;
+
+// $theme-colors: (
+
+// );
+
+$body-bg:       $dark;
+$body-color:    $light;
+
+@import '../../node_modules/bootstrap/scss/bootstrap.scss';
+
+// Custom App CSS
+.gd-body-container {
+  margin: auto;
+  padding: 0px;
+  max-width: 992px;
+}
