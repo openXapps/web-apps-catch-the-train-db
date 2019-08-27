@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
-import AuthProvider from '../context/AuthProvider';
+// import AuthProvider from '../context/AuthProvider';
+import { FirebaseProvider } from '../context/Firebase';
 
 // Components
 import Navbar from './Navbar';
@@ -10,7 +11,7 @@ import PageNotFound from './PageNotFound';
 
 function App() {
   return (
-    <AuthProvider>
+    <FirebaseProvider>
       <BrowserRouter>
         <Navbar />
         <Switch>
@@ -19,7 +20,7 @@ function App() {
           <Route component={PageNotFound} />
         </Switch>
       </BrowserRouter>
-    </AuthProvider>
+    </FirebaseProvider>
   );
 }
 

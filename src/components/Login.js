@@ -1,5 +1,6 @@
 import React from 'react';
-import useAuth from '../hooks/useAuth';
+// import useAuth from '../hooks/useAuth';
+import useFirebase from '../context/Firebase';
 
 const userDefault = {
   email: 'gavin.dalton@standardbank.co.za',
@@ -7,7 +8,7 @@ const userDefault = {
 };
 
 const Login = () => {
-  const auth = useAuth();
+  const firebase = useFirebase();
   const [user, setUser] = React.useState(userDefault);
 
   return (
@@ -42,9 +43,9 @@ const Login = () => {
           className="btn btn-primary"
           onClick={(e) => {
             e.preventDefault();
-            auth.signIn(user.email, user.password);
+            firebase.signIn(user.email, user.password);
           }}
-          disabled={auth.isSignedIn || auth.isBusy}
+          disabled={firebase.authState.authIsSignedIn || firebase.authState.authIsBusy}
         >Sign In</button>
       </form>
     </div>

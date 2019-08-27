@@ -1,11 +1,11 @@
 import React from 'react';
 
-const PageNotFound = () => {
+const Station = () => {
   return (
-    <div className="border border-warning rounded-lg m-3 p-3">
-      <h4>Page Not Found</h4>
+    <div className="">
+      <h4>Station</h4>
     </div>
   );
 };
 
-export default PageNotFound;
+export default Station;

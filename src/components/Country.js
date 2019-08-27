@@ -1,11 +1,23 @@
 import React from 'react';
+import app from 'firebase/app';
+import 'firebase/firestore';
+import firebaseConfig from '../config/firebase';
 
-const PageNotFound = () => {
+app.initializeApp(firebaseConfig);
+
+const Country = () => {
+  const [countries, setCountries] = React.useState([]);
+
+  React.useEffect(() => {
+    // const unsubscribe = 
+    return () => {};
+  })
+  
   return (
-    <div className="border border-warning rounded-lg m-3 p-3">
-      <h4>Page Not Found</h4>
+    <div className="">
+      <h4>Country</h4>
     </div>
   );
 };
 
-export default PageNotFound;
+export default Country;

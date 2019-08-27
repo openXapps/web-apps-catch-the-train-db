@@ -1,9 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import useAuth from '../hooks/useAuth';
+// import useAuth from '../hooks/useAuth';
+import useFirebase from '../context/Firebase';
 
-const Navbar = (props) => {
-  const auth = useAuth();
+const Navbar = () => {
+  const { authState, signOut } = useFirebase();
   return (
     <div>
       <nav className="navbar navbar-expand-sm bg-light navbar-light px-2">
@@ -19,20 +20,20 @@ const Navbar = (props) => {
 
         <div className="collapse navbar-collapse" id="collapsibleNavbar">
           <form className="form-inline ml-auto">
-            {auth.isSignedIn ? (
+            {authState.authIsSignedIn ? (
               <button
                 className="btn btn-success btn-block mt-sm-0 mt-2"
                 onClick={(e) => {
                   e.preventDefault();
-                  auth.signOut();
+                  signOut();
                 }}
-                disabled={auth.isBusy}
+                disabled={authState.authIsBusy}
               >Sign Out</button>
             ) : (
                 <Link
                   className="btn btn-secondary btn-block mt-sm-0 mt-2"
                   to="/login"
-                  disabled={auth.isBusy}
+                  disabled={authState.authIsBusy}
                 >Sign In</Link>
               )}
           </form>
