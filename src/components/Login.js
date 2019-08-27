@@ -3,8 +3,8 @@ import React from 'react';
 import useFirebase from '../context/Firebase';
 
 const userDefault = {
-  email: 'gavin.dalton@standardbank.co.za',
-  password: 'password123'
+  email: '',
+  password: ''
 };
 
 const Login = () => {
