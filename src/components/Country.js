@@ -1,21 +1,48 @@
 import React from 'react';
-import app from 'firebase/app';
-import 'firebase/firestore';
-import firebaseConfig from '../config/firebase';
+import useFirebase from '../context/Firebase';
 
-app.initializeApp(firebaseConfig);
+// https://firebase.google.com/docs/reference/js/firebase.firestore
 
-const Country = () => {
+const Country = ({ uid }) => {
+  const firebase = useFirebase();
   const [countries, setCountries] = React.useState([]);
 
   React.useEffect(() => {
-    // const unsubscribe = 
-    return () => {};
-  })
-  
+    firebase.db.collection('country')
+      .get()
+      .then((docs) => {
+        docs.forEach((doc) => {
+          // doc.data() is never undefined for query doc snapshots
+          // console.log('Country: doc.id.....', doc.id);
+          // console.log('Country: doc.data....', doc.data());
+          setCountries(() => {
+            return [...countries, doc.data()];
+          });
+        });
+      })
+      .catch((error) => {
+        console.log("Country: Error getting documents: ", error);
+      });
+    return () => {
+      console.log('Country: Effect clean-up...');
+    };
+  }, [])
+
+  // console.log('Country: countries...', countries);
+  // console.log('Country: user.id...', uid);
+
   return (
     <div className="">
-      <h4>Country</h4>
+      <h4>Countries</h4>
+      {countries.length > 0 ? (
+        countries.map((country, index) => {
+          return (
+            <div key={index}>{country.name}</div>
+          );
+        })
+      ) : (
+          <div>Loading countries...</div>
+        )}
     </div>
   );
 };

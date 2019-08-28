@@ -9,7 +9,7 @@ const Navbar = () => {
     <div>
       <nav className="navbar navbar-expand-sm bg-light navbar-light px-2">
         <Link className="btn btn-secondary" to="/">Home</Link>
-        <span className="navbar-text text-dark h5 ml-sm-2 mb-0">Firebase Auth Template</span>
+        <span className="navbar-text text-dark h5 ml-sm-2 mb-0">Catch the TRAIN DB</span>
 
         <button
           className="navbar-toggler"
