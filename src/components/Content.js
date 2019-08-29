@@ -10,10 +10,10 @@ const Content = () => {
 
   return (
     <div className="border border-primary rounded-lg m-3 p-3">
-      <h4>Content</h4>
+      <h4>Welcome</h4>
       {authState.authIsSignedIn ? (
         <>
-          <p>{`Hello ${user.email}`}</p>
+          <p>{`You are signed in as ${user.email}`}</p>
           <Country uid={user.uid}/>
         </>
       ) : (

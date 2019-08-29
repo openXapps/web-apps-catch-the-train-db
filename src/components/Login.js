@@ -7,9 +7,16 @@ const userDefault = {
   password: process.env.REACT_APP_PW
 };
 
-const Login = () => {
+const Login = (props) => {
   const firebase = useFirebase();
   const [user, setUser] = React.useState(userDefault);
+
+  React.useEffect(() => {
+    firebase.authState.authIsSignedIn && props.history.goBack();
+    return () => {
+      console.log('Login: Effect clean-up...');
+    };
+  }, [firebase.authState.authIsSignedIn, props.history])
 
   return (
     <div className="border border-primary rounded-lg m-3 p-3">

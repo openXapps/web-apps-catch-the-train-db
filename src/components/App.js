@@ -7,6 +7,7 @@ import { FirebaseProvider } from '../context/Firebase';
 import Navbar from './Navbar';
 import Content from './Content';
 import Login from './Login';
+import State from './State';
 import PageNotFound from './PageNotFound';
 
 function App() {
@@ -15,8 +16,9 @@ function App() {
       <BrowserRouter>
         <Navbar />
         <Switch>
-          <Route exact path="/" component={Content} />
-          <Route exact path="/login" component={Login} />
+          <Route path="/" exact component={Content} />
+          <Route path="/login" component={Login} />
+          <Route path="/state/:id" component={State} />
           <Route component={PageNotFound} />
         </Switch>
       </BrowserRouter>

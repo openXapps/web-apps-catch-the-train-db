@@ -1,9 +1,10 @@
 import React from 'react';
 
-const State = () => {
+const State = (props) => {
   return (
-    <div className="">
-      <h4>State</h4>
+    <div className="border border-primary rounded-lg m-3 p-3">
+      <h4>States / Provinces</h4>
+      <p>Country ID: {props.match.params.id}</p>
     </div>
   );
 };
