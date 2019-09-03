@@ -5,6 +5,7 @@ import useFirebase from '../context/Firebase';
 
 const Navbar = () => {
   const { authState, signOut } = useFirebase();
+
   return (
     <div>
       <nav className="navbar navbar-expand-sm bg-light navbar-light px-2">
@@ -21,14 +22,12 @@ const Navbar = () => {
         <div className="collapse navbar-collapse" id="collapsibleNavbar">
           <form className="form-inline ml-auto">
             {authState.authIsSignedIn ? (
-              <button
+              <Link
                 className="btn btn-success btn-block mt-sm-0 mt-2"
-                onClick={(e) => {
-                  e.preventDefault();
-                  signOut();
-                }}
+                onClick={() => { signOut(); }}
+                to="/"
                 disabled={authState.authIsBusy}
-              >Sign Out</button>
+              >Sign Out</Link>
             ) : (
                 <Link
                   className="btn btn-secondary btn-block mt-sm-0 mt-2"

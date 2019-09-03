@@ -4,57 +4,69 @@ import useFirebase from '../context/Firebase';
 
 // https://firebase.google.com/docs/reference/js/firebase.firestore
 
-const Country = ({ uid }) => {
-  const firebase = useFirebase();
-  const [countries, setCountries] = React.useState([{ id: '', data: {} }]);
+const Country = (props) => {
+  const { db } = useFirebase();
+  const [uid, setUid] = React.useState('123');
+  const [country, setCountry] = React.useState({
+    id: '123',
+    name: 'bla bla',
+    iso: 'xxx',
+    enabled: true
+  });
 
   React.useEffect(() => {
-    uid && firebase.db.collection('country')
+    setUid(() => { return props.match.params.uid });
+    db.collection('country').doc(props.match.params.id)
       .get()
-      .then((querySnapshot) => {
-        setCountries(() => {
-          let x = [];
-          querySnapshot.forEach((doc) => {
-            x.push({ id: doc.id, data: doc.data() });
+      .then((snapshot) => {
+        console.log('Country: snapshot...', snapshot);
+        setTimeout(() => {
+          setCountry(() => {
+            return {
+              id: snapshot.id,
+              name: snapshot.get('name'),
+              iso: snapshot.get('iso'),
+              enabled: snapshot.get('enabled')
+            };
           });
-          return x;
-        });
+        }, 1000);
       })
       .catch((error) => {
-        console.log("Country: Error getting documents: ", error);
+        console.log("Country: Error getting document: ", error);
       });
     return () => {
-      console.log('Country: Effect clean-up...');
+      // console.log('Country: Effect clean-up...');
     };
-  }, [uid, firebase.db])
+  }, [props.match.params.uid, props.match.params.id, db])
 
-  // console.log('Country: countries...', countries);
-  // console.log('Country: user.id...', uid);
+  // console.log('Country: props......', props);
+  // console.log('Country: country....', country);
+  // console.log('Country: params......', props.match.params);
 
   return (
-    <div className="">
-      {countries.length > 0 ? (
-        <div className="dropdown">
-          <button
-            className="btn btn-secondary dropdown-toggle"
-            type="button"
-            id="gd-cttdb-mnu-country"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false"
-          >Select a Country</button>
-          <div className="dropdown-menu" aria-labelledby="gd-cttdb-mnu-country">
-            {countries.map((country, index) => {
-              return (
-                <Link className="dropdown-item" to={`/state/${country.id}`} key={index}>{country.data.name}</Link>
-              );
-            })}
-            <Link className="dropdown-item" to="/">United State</Link>
-            <Link className="dropdown-item" to="/">Germany</Link>
-          </div>
-        </div>
+    <div className="border border-primary rounded-lg m-3 p-3">
+      {country.id === '123' ? (
+        <h4>Loading country from database...</h4>
       ) : (
-          <div>Loading countries...</div>
+          <div className="">
+            <h4>{country.name} ({country.iso})</h4>
+            <Link
+              className="btn btn-outline-primary mt-2 btn-block"
+              to={encodeURI(`/state/${uid}/${country.id}`)}
+            >States / Provinces</Link>
+            <Link
+              className="btn btn-outline-primary mt-2 btn-block"
+              to={encodeURI(`/country-edit/${uid}/${country.id}`)}
+            >Edit {country.name}</Link>
+            <Link
+              className="btn btn-outline-primary mt-2 btn-block"
+              to={encodeURI(`/country-new/${uid}`)}
+            >Create New Country</Link>
+            <button
+              className="btn btn-outline-secondary mt-2 btn-block"
+              onClick={() => { props.history.goBack() }}
+            >Back</button>
+          </div>
         )}
     </div>
   );

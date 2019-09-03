@@ -30,8 +30,6 @@ $body-bg:       $dark;
 $body-color:    $light;
 
 // Dropdowns
-//
-// Dropdown menu container and contents.
 
 // $dropdown-min-width:                10rem !default;
 $dropdown-padding-y:                0px;
@@ -55,6 +53,11 @@ $dropdown-link-hover-bg:            $secondary;
 // $dropdown-item-padding-y:           .25rem !default;
 // $dropdown-item-padding-x:           1.5rem !default;
 // $dropdown-header-color:             $gray-600 !default;
+
+// Forms
+
+$input-bg:                          $primary;
+$input-color:                       $light;
 
 @import '../../node_modules/bootstrap/scss/bootstrap.scss';
 

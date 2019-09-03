@@ -116,11 +116,11 @@ const useFirebaseProvider = () => {
     // Firebase auth subscription
     const unsubscribeAuth = auth.onAuthStateChanged(user => {
       if (user) {
-        console.log('useAuthProvider: user state...', user.email);
+        // console.log('useAuthProvider: user state...', user.email);
         setUser(user);
         setAuthIsSignedIn(true);
       } else {
-        console.log('useAuthProvider: user state... Signed out!');
+        // console.log('useAuthProvider: user state... Signed out!');
         setAuthIsSignedIn(authIsSignedInDefault);
         setUser(userDefault);
       }
