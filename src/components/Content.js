@@ -43,28 +43,22 @@ const Content = () => {
       {authState.authIsSignedIn ? (
         <>
           <p>{`You are signed in as ${user.email}`}</p>
+          <Link
+            className="btn btn-outline-primary mt-2 btn-block"
+            to={encodeURI(`/country-new/${user.uid}`)}
+          >Add Another Country</Link>
           {countries.length > 0 ? (
-            <div className="dropdown">
-              <button
-                className="btn btn-secondary dropdown-toggle"
-                type="button"
-                id="gd-cttdb-mnu-country"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-              >Select a Country</button>
-              <div className="dropdown-menu" aria-labelledby="gd-cttdb-mnu-country">
-                {countries.map((country, index) => {
-                  return (
-                    <Link
-                      className="dropdown-item"
-                      key={index}
-                      to={`/country/${user.uid}/${country.id}`}
-                    >{country.name}</Link>
-                  );
-                })}
-              </div>
-            </div>
+            countries.map((country, index) => {
+              return (
+                <div className="mt-2">
+                  <Link
+                    className="btn btn-outline-info btn-block"
+                    key={index}
+                    to={`/country/${user.uid}/${country.id}`}
+                  >{country.name}</Link>
+                </div>
+              );
+            })
           ) : (
               <div>Loading countries...</div>
             )}

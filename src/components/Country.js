@@ -5,7 +5,7 @@ import useFirebase from '../context/Firebase';
 // https://firebase.google.com/docs/reference/js/firebase.firestore
 
 const Country = (props) => {
-  const { db } = useFirebase();
+  const { authState, db } = useFirebase();
   const [uid, setUid] = React.useState('123');
   const [country, setCountry] = React.useState({
     id: '123',
@@ -45,6 +45,31 @@ const Country = (props) => {
 
   return (
     <div className="border border-primary rounded-lg m-3 p-3">
+      {authState.authIsSignedIn ? (
+        <>
+          <Link
+            className="btn btn-outline-primary mt-2 btn-block"
+            to={encodeURI(`/country-new/${user.uid}`)}
+          >Add Another Country</Link>
+          {countries.length > 0 ? (
+            countries.map((country, index) => {
+              return (
+                <div className="mt-2">
+                  <Link
+                    className="btn btn-outline-info btn-block"
+                    key={index}
+                    to={`/country/${user.uid}/${country.id}`}
+                  >{country.name}</Link>
+                </div>
+              );
+            })
+          ) : (
+              <div>Loading countries...</div>
+            )}
+        </>
+      ) : (
+          <p>You not signed in!</p>
+        )}
       {country.id === '123' ? (
         <h4>Loading country from database...</h4>
       ) : (
@@ -58,12 +83,8 @@ const Country = (props) => {
               className="btn btn-outline-primary mt-2 btn-block"
               to={encodeURI(`/country-edit/${uid}/${country.id}`)}
             >Edit {country.name}</Link>
-            <Link
-              className="btn btn-outline-primary mt-2 btn-block"
-              to={encodeURI(`/country-new/${uid}`)}
-            >Create New Country</Link>
             <button
-              className="btn btn-outline-secondary mt-2 btn-block"
+              className="btn btn-secondary mt-2 btn-block"
               onClick={() => { props.history.goBack() }}
             >Back</button>
           </div>

@@ -30,7 +30,7 @@ const Navbar = () => {
               >Sign Out</Link>
             ) : (
                 <Link
-                  className="btn btn-secondary btn-block mt-sm-0 mt-2"
+                  className="btn btn-warning btn-block mt-sm-0 mt-2"
                   to="/login"
                   disabled={authState.authIsBusy}
                 >Sign In</Link>

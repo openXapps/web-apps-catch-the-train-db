@@ -27,6 +27,7 @@ const FirebaseContext = React.createContext();
  */
 app.initializeApp(firebaseConfig);
 const auth = app.auth();
+const db = app.firestore(); 
 
 /**
  * Firebase state defaults
@@ -44,7 +45,6 @@ const useFirebaseProvider = () => {
   const [authIsBusy, setAuthIsBusy] = React.useState(authIsBusyDefault);
   const [authIsSignedIn, setAuthIsSignedIn] = React.useState(authIsSignedInDefault);
   const [authIsError, setAuthIsError] = React.useState(authIsErrorDefault);
-  const db = app.firestore(); 
 
   const signIn = (email, password) => {
     setAuthIsBusy(true);
@@ -154,7 +154,7 @@ const useFirebaseProvider = () => {
 };
 
 /**
- * Contaxt provider component that wraps the App and
+ * Context provider component that wraps the App and
  * exposes Firebase to any child component that calls useFirebase() Hook.
  */
 export const FirebaseProvider = (props) => {
