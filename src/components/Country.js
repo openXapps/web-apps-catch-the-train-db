@@ -29,7 +29,7 @@ const Country = (props) => {
               enabled: snapshot.get('enabled')
             };
           });
-        }, 1000);
+        }, 500);
       })
       .catch((error) => {
         console.log("Country: Error getting document: ", error);
@@ -46,48 +46,35 @@ const Country = (props) => {
   return (
     <div className="border border-primary rounded-lg m-3 p-3">
       {authState.authIsSignedIn ? (
-        <>
-          <Link
-            className="btn btn-outline-primary mt-2 btn-block"
-            to={encodeURI(`/country-new/${user.uid}`)}
-          >Add Another Country</Link>
-          {countries.length > 0 ? (
-            countries.map((country, index) => {
-              return (
-                <div className="mt-2">
-                  <Link
-                    className="btn btn-outline-info btn-block"
-                    key={index}
-                    to={`/country/${user.uid}/${country.id}`}
-                  >{country.name}</Link>
-                </div>
-              );
-            })
-          ) : (
-              <div>Loading countries...</div>
-            )}
-        </>
+        country.id === '123' ? (
+          <h4>Loading country from database...</h4>
+        ) : (
+            <div className="">
+              <h4>{country.name} ({country.iso})</h4>
+              <Link
+                className="btn btn-outline-primary mt-2 btn-block"
+                to={encodeURI(`/country-edit/${uid}/${country.id}`)}
+              >Edit Country Details</Link>
+              <Link
+                className="btn btn-outline-primary mt-2 btn-block"
+                to={encodeURI(`/state-new/${uid}/${country.id}`)}
+              >Add Another State</Link>
+              <button
+                className="btn btn-secondary mt-2 btn-block"
+                onClick={() => { props.history.goBack() }}
+              >Back</button>
+              <ul>
+                <li>State</li>
+                <li>State</li>
+                <li>State</li>
+                <li>State</li>
+                <li>State</li>
+                <li>State</li>
+              </ul>
+            </div>
+          )
       ) : (
-          <p>You not signed in!</p>
-        )}
-      {country.id === '123' ? (
-        <h4>Loading country from database...</h4>
-      ) : (
-          <div className="">
-            <h4>{country.name} ({country.iso})</h4>
-            <Link
-              className="btn btn-outline-primary mt-2 btn-block"
-              to={encodeURI(`/state/${uid}/${country.id}`)}
-            >States / Provinces</Link>
-            <Link
-              className="btn btn-outline-primary mt-2 btn-block"
-              to={encodeURI(`/country-edit/${uid}/${country.id}`)}
-            >Edit {country.name}</Link>
-            <button
-              className="btn btn-secondary mt-2 btn-block"
-              onClick={() => { props.history.goBack() }}
-            >Back</button>
-          </div>
+          <p className="text-warning">You not signed in!</p>
         )}
     </div>
   );

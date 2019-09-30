@@ -2,13 +2,15 @@ import React from 'react';
 import useFirebase from '../context/Firebase';
 
 const CountryEdit = (props) => {
-  const { db } = useFirebase();
+  const { authState, db } = useFirebase();
   const [mode, setMode] = React.useState('NEW');
   const [isBusy, setIsBusy] = React.useState(true);
   const [country, setCountry] = React.useState({
     name: '',
     iso: '',
-    enabled: false
+    enabled: false,
+    modifiedBy: props.match.params.uid,
+    modifiedDate: new Date()
   });
   const [title, setTitle] = React.useState('Loading...');
 
@@ -28,7 +30,7 @@ const CountryEdit = (props) => {
 
   // Get country details from FB
   React.useEffect(() => {
-    if (mode === 'EDIT') {
+    if (mode === 'EDIT' && authState.authIsSignedIn) {
       setIsBusy(true);
       db.collection('country').doc(props.match.params.id)
         .get()
@@ -51,6 +53,7 @@ const CountryEdit = (props) => {
     } else {
       setCountry(() => {
         return {
+          ...country,
           name: '',
           iso: '',
           enabled: false
@@ -60,7 +63,7 @@ const CountryEdit = (props) => {
     }
     // Clean-up
     return () => { };
-  }, [props.match.params.id, db, mode])
+  }, [props.match.params.id, db, mode, authState.authIsSignedIn])
 
   const handleSave = (e) => {
     e.preventDefault();
@@ -68,6 +71,9 @@ const CountryEdit = (props) => {
     setIsBusy(true);
     switch (mode) {
       case 'EDIT':
+        /**
+         * TODO: Need to implement data editing here
+         */
         console.log('CountryEdit: mode...', mode);
         setIsBusy(false);
         props.history.goBack();
@@ -102,6 +108,7 @@ const CountryEdit = (props) => {
   return (
     <div className="border border-primary rounded-lg m-3 p-3">
       <h4>{title}</h4>
+      {!authState.authIsSignedIn && (<p className="text-warning">You not signed in!</p>)}
       <form onSubmit={handleSave} autoComplete="off">
         <div className="form-group">
           <label htmlFor="gd-cttdb-fld-country-name">Country Name</label>
@@ -143,7 +150,7 @@ const CountryEdit = (props) => {
         <button
           type="submit"
           className="btn btn-outline-primary"
-          disabled={isBusy}
+          disabled={isBusy || !authState.authIsSignedIn}
         >Save</button>
         <button
           type="button"

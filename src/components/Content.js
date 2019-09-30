@@ -50,13 +50,11 @@ const Content = () => {
           {countries.length > 0 ? (
             countries.map((country, index) => {
               return (
-                <div className="mt-2">
-                  <Link
-                    className="btn btn-outline-info btn-block"
-                    key={index}
-                    to={`/country/${user.uid}/${country.id}`}
-                  >{country.name}</Link>
-                </div>
+                <Link
+                  className="btn btn-outline-info btn-block mt-2"
+                  key={index}
+                  to={`/country/${user.uid}/${country.id}`}
+                >{country.name}</Link>
               );
             })
           ) : (
@@ -64,7 +62,7 @@ const Content = () => {
             )}
         </>
       ) : (
-          <p>You not signed in!</p>
+          <p className="text-warning">You not signed in!</p>
         )}
     </div>
   );
