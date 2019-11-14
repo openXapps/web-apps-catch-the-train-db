@@ -1,43 +1,43 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import useFirebase from '../context/Firebase';
+import { countrySchema } from '../config/schemas';
 
 // https://firebase.google.com/docs/reference/js/firebase.firestore
 
 const Country = (props) => {
   const { authState, db } = useFirebase();
-  const [uid, setUid] = React.useState('123');
-  const [country, setCountry] = React.useState({
-    id: '123',
-    name: 'bla bla',
-    iso: 'xxx',
-    enabled: true
-  });
+  // const [uid, setUid] = React.useState('123');
+  const [country, setCountry] = React.useState(countrySchema);
 
   React.useEffect(() => {
-    setUid(() => { return props.match.params.uid });
-    db.collection('country').doc(props.match.params.id)
-      .get()
-      .then((snapshot) => {
-        console.log('Country: snapshot...', snapshot);
-        setTimeout(() => {
-          setCountry(() => {
-            return {
-              id: snapshot.id,
-              name: snapshot.get('name'),
-              iso: snapshot.get('iso'),
-              enabled: snapshot.get('enabled')
-            };
-          });
-        }, 500);
-      })
-      .catch((error) => {
-        console.log("Country: Error getting document: ", error);
-      });
+    // setUid(() => { return props.match.params.uid });
+    if (authState.authIsSignedIn) {
+      db.collection('country').doc(props.match.params.id)
+        .get()
+        .then((snapshot) => {
+          // console.log('Country: snapshot...', snapshot);
+          setTimeout(() => {
+            setCountry(() => {
+              return {
+                name: snapshot.get('name'),
+                iso: snapshot.get('iso'),
+                enabled: snapshot.get('enabled'),
+                modifiedBy: snapshot.get('modifiedBy') || props.match.params.uid,
+                modifiedDate: snapshot.get('modifiedDate') || new Date()
+              };
+            });
+          }, 500);
+        })
+        .catch((error) => {
+          console.log("Country: Error getting document: ", error);
+        });
+    }
+    // Effect cleanup
     return () => {
       // console.log('Country: Effect clean-up...');
     };
-  }, [props.match.params.uid, props.match.params.id, db])
+  }, [props.match.params.uid, props.match.params.id, db, authState.authIsSignedIn])
 
   // console.log('Country: props......', props);
   // console.log('Country: country....', country);
@@ -46,18 +46,18 @@ const Country = (props) => {
   return (
     <div className="border border-primary rounded-lg m-3 p-3">
       {authState.authIsSignedIn ? (
-        country.id === '123' ? (
+        country.name === '' ? (
           <h4>Loading country from database...</h4>
         ) : (
             <div className="">
               <h4>{country.name} ({country.iso})</h4>
               <Link
                 className="btn btn-outline-primary mt-2 btn-block"
-                to={encodeURI(`/country-edit/${uid}/${country.id}`)}
+                to={encodeURI(`/country-edit/${props.match.params.uid}/${props.match.params.id}`)}
               >Edit Country Details</Link>
               <Link
                 className="btn btn-outline-primary mt-2 btn-block"
-                to={encodeURI(`/state-new/${uid}/${country.id}`)}
+                to={encodeURI(`/state-new/${props.match.params.uid}/${props.match.params.id}`)}
               >Add Another State</Link>
               <button
                 className="btn btn-secondary mt-2 btn-block"

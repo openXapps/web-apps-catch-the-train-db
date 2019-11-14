@@ -27,7 +27,7 @@ const FirebaseContext = React.createContext();
  */
 app.initializeApp(firebaseConfig);
 const auth = app.auth();
-const db = app.firestore(); 
+const db = app.firestore();
 
 /**
  * Firebase state defaults
@@ -49,11 +49,10 @@ const useFirebaseProvider = () => {
   const signIn = (email, password) => {
     setAuthIsBusy(true);
     setAuthIsError(authIsErrorDefault);
-    return auth.signInWithEmailAndPassword(email, password)
+    auth.signInWithEmailAndPassword(email, password)
       .then((response) => {
         setAuthIsBusy(authIsBusyDefault);
         setUser(response.user);
-        return response.user;
       })
       .catch((err) => {
         setAuthIsBusy(authIsBusyDefault);
@@ -64,16 +63,15 @@ const useFirebaseProvider = () => {
   const signUp = (email, password) => {
     setAuthIsBusy(true);
     setAuthIsError(authIsErrorDefault);
-    return auth.createUserWithEmailAndPassword(email, password)
+    auth.createUserWithEmailAndPassword(email, password)
       .then(response => {
         setAuthIsBusy(authIsBusyDefault);
         setUser(response.user);
-        return response.user;
       })
       .catch((err) => {
         setAuthIsBusy(authIsBusyDefault);
         setAuthIsError({ ...authIsError, state: true, error: err.code })
-      });;
+      });
   };
 
   const signOut = () => {
@@ -93,7 +91,6 @@ const useFirebaseProvider = () => {
     auth.sendPasswordResetEmail(email)
       .then(() => {
         setAuthIsBusy(authIsBusyDefault);
-        return true;
       });
   };
 
@@ -102,7 +99,6 @@ const useFirebaseProvider = () => {
     auth.confirmPasswordReset(code, password)
       .then(() => {
         setAuthIsBusy(authIsBusyDefault);
-        return true;
       });
   };
 

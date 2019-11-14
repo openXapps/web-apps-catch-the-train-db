@@ -1,17 +1,12 @@
 import React from 'react';
 import useFirebase from '../context/Firebase';
+import { countrySchema } from '../config/schemas';
 
 const CountryEdit = (props) => {
   const { authState, db } = useFirebase();
   const [mode, setMode] = React.useState('NEW');
   const [isBusy, setIsBusy] = React.useState(true);
-  const [country, setCountry] = React.useState({
-    name: '',
-    iso: '',
-    enabled: false,
-    modifiedBy: props.match.params.uid,
-    modifiedDate: new Date()
-  });
+  const [country, setCountry] = React.useState(countrySchema);
   const [title, setTitle] = React.useState('Loading...');
 
   // Set editor mode effect
@@ -24,7 +19,7 @@ const CountryEdit = (props) => {
       setMode('NEW');
       setTitle('Creating a new country');
     }
-    // Effect clean-up function
+    // Effect cleanup
     return () => true;
   }, [props.match.path])
 
@@ -35,35 +30,33 @@ const CountryEdit = (props) => {
       db.collection('country').doc(props.match.params.id)
         .get()
         .then((snapshot) => {
-          console.log('Country: snapshot...', snapshot);
+          // console.log('CountryEdit: snapshot...', snapshot);
           setTimeout(() => {
-            setCountry(() => {
-              return {
-                name: snapshot.get('name'),
-                iso: snapshot.get('iso'),
-                enabled: snapshot.get('enabled')
-              };
+            setCountry({
+              name: snapshot.get('name'),
+              iso: snapshot.get('iso'),
+              enabled: snapshot.get('enabled'),
+              modifiedBy: snapshot.get('modifiedBy') || props.match.params.uid,
+              modifiedDate: snapshot.get('modifiedDate') || new Date()
             });
             setIsBusy(false);
-          }, 1000);
+          }, 500);
         })
         .catch((error) => {
-          console.log("Country: Error getting document: ", error);
+          console.log("CountryEdit: Error getting document: ", error);
         });
     } else {
-      setCountry(() => {
+      setCountry((countrySchema) => {
         return {
-          ...country,
-          name: '',
-          iso: '',
-          enabled: false
+          ...countrySchema,
+          modifiedBy: props.match.params.uid
         };
       });
       setIsBusy(false);
     }
     // Clean-up
     return () => { };
-  }, [props.match.params.id, db, mode, authState.authIsSignedIn])
+  }, [props.match.params.id, props.match.params.uid, db, mode, authState.authIsSignedIn])
 
   const handleSave = (e) => {
     e.preventDefault();
@@ -71,18 +64,24 @@ const CountryEdit = (props) => {
     setIsBusy(true);
     switch (mode) {
       case 'EDIT':
-        /**
-         * TODO: Need to implement data editing here
-         */
-        console.log('CountryEdit: mode...', mode);
-        setIsBusy(false);
-        props.history.goBack();
+        // console.log('CountryEdit: mode...', mode);
+        collection.doc(props.match.params.id).set(country)
+          .then(() => {
+            // console.log('CountryEdit: replaced country...', country.name);
+            setIsBusy(false);
+            props.history.goBack();
+          })
+          .catch((error) => {
+            console.log('CountryEdit: error replacing country...', error);
+            setIsBusy(false);
+            props.history.goBack();
+          });
         break;
       case 'NEW':
-        console.log('CountryEdit: mode...', mode);
+        // console.log('CountryEdit: mode...', mode);
         collection.add(country)
           .then((docRef) => {
-            console.log('CountryEdit: new country ID...', docRef.id);
+            // console.log('CountryEdit: new country ID...', docRef.id);
             setIsBusy(false);
             props.history.goBack();
           });
@@ -104,6 +103,7 @@ const CountryEdit = (props) => {
 
   // console.log('CountryEdit: enabled...', country.enabled);
   // onChange={e => setCountry({ ...country, enabled: e.target.value })}
+  // console.log("CountryEdit: country loaded...", country);
 
   return (
     <div className="border border-primary rounded-lg m-3 p-3">
