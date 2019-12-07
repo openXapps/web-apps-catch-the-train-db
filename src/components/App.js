@@ -25,7 +25,8 @@ function App() {
           <Route path="/country-edit/:uid/:id" component={CountryEdit} />
           <Route path="/country-new/:uid" component={CountryEdit} />
           <Route path="/state/:uid/:id" component={State} />
-          <Route path="/state-new/:uid/:id" component={StateEdit} />
+          <Route path="/state-edit/:uid/:id" component={StateEdit} />
+          <Route path="/state-new/:uid" component={StateEdit} />
           <Route path="/station/:uid/:id" component={Station} />
           <Route component={PageNotFound} />
         </Switch>

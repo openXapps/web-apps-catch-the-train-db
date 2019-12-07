@@ -13,7 +13,7 @@ const Content = () => {
 
   React.useEffect(() => {
     if (authState.authIsSignedIn) {
-      db.collection('country')
+      db.collection('country').orderBy('name')
         .get()
         .then((snapshot) => {
           console.log('Content.Country: snapshot.docs...', snapshot.docs);

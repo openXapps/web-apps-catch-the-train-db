@@ -7,11 +7,9 @@ import { countrySchema } from '../config/schemas';
 
 const Country = (props) => {
   const { authState, db } = useFirebase();
-  // const [uid, setUid] = React.useState('123');
   const [country, setCountry] = React.useState(countrySchema);
 
   React.useEffect(() => {
-    // setUid(() => { return props.match.params.uid });
     if (authState.authIsSignedIn) {
       db.collection('country').doc(props.match.params.id)
         .get()

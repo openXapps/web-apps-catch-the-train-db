@@ -36,8 +36,8 @@ const CountryEdit = (props) => {
               name: snapshot.get('name'),
               iso: snapshot.get('iso'),
               enabled: snapshot.get('enabled'),
-              modifiedBy: snapshot.get('modifiedBy') || props.match.params.uid,
-              modifiedDate: snapshot.get('modifiedDate') || new Date()
+              modifiedBy: props.match.params.uid,
+              modifiedDate: new Date()
             });
             setIsBusy(false);
           }, 500);
